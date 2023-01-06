@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
-import { Pressable } from 'react-native'
+import { Pressable, View } from 'react-native'
 
 import { CardList } from '../components/card-list'
 import { List } from '../components/history/list'
@@ -24,8 +24,8 @@ export const Home = () => {
     })
   }
   return (
-    <ScreenLayout>
-      <Row className="items-center justify-between mb-6">
+    <ScreenLayout withPadding={false}>
+      <Row className="items-center justify-between mb-6 px-5">
         <Row className="items-center">
           <Typography variant="title" weight="700" className="text-primary">
             2022
@@ -41,8 +41,10 @@ export const Home = () => {
           </Pressable>
         </Row>
       </Row>
-      <List />
-      <Row className="justify-between items-center mt-8 mb-3">
+      <View className="pl-5">
+        <List />
+      </View>
+      <Row className="justify-between items-center mt-8 mb-3 px-5">
         <Typography
           className="text-black opacity-40"
           variant="body"
@@ -58,7 +60,9 @@ export const Home = () => {
           3 pinned
         </Typography>
       </Row>
-      <CardList />
+      <View className="px-5">
+        <CardList />
+      </View>
     </ScreenLayout>
   )
 }
