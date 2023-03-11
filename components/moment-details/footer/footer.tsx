@@ -25,9 +25,16 @@ import { Typography } from '../../typography'
 type navigationType =
   RootStackScreenProps<RouteName.MomentDetails>['navigation']
 
-export const Footer: React.FC<{ momentId: string; isEditMode: boolean }> = ({
+interface FooterProps {
+  onDeletePress: () => void
+  momentId: string
+  isEditMode: boolean
+}
+
+export const Footer: React.FC<FooterProps> = ({
   momentId,
   isEditMode,
+  onDeletePress,
 }) => {
   const nav = useNavigation<navigationType>()
   const [visible] = useKeyboard()
@@ -112,7 +119,7 @@ export const Footer: React.FC<{ momentId: string; isEditMode: boolean }> = ({
               id: 'delete',
               title: 'Delete',
               icon: <DeleteIcon className="text-secondary-dark" />,
-              action: () => null,
+              action: onDeletePress,
             },
             {
               id: 'edit',

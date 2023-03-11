@@ -7,18 +7,25 @@ import { Input } from '../components/input'
 import { Row } from '../components/row'
 import { ScreenLayout } from '../components/screen-layout'
 import { Typography } from '../components/typography'
+import { useCreateGoal } from '../hooks/goals'
 import { RootStackScreenProps, RouteName } from '../types/routes'
 
 type navigationType = RootStackScreenProps<RouteName.CreateGoal>['navigation']
 
 export const CreateGoal = () => {
   const nav = useNavigation<navigationType>()
-  const [search, setSearch] = useState<string>('')
+  const [goalValue, setGoalValue] = useState<string>('')
   const inputRef = useRef<TextInput | null>()
+  const handleCreateGoal = useCreateGoal()
 
   const onClosePress = () => {
     if (nav.canGoBack) return nav.goBack()
     return nav.navigate(RouteName.Tabs, { screen: RouteName.Goals })
+  }
+
+  const onCreateGoal = () => {
+    handleCreateGoal(goalValue)
+    onClosePress()
   }
 
   useEffect(() => {
@@ -31,7 +38,7 @@ export const CreateGoal = () => {
         <Pressable onPress={onClosePress} hitSlop={10}>
           <CloseIcon className="text-primary" />
         </Pressable>
-        <Pressable onPress={onClosePress}>
+        <Pressable onPress={onCreateGoal}>
           <Typography variant="button" weight="400" className="text-primary-60">
             Create
           </Typography>
@@ -39,8 +46,8 @@ export const CreateGoal = () => {
       </Row>
       <Input
         inputRef={inputRef}
-        value={search}
-        onChangeText={setSearch}
+        value={goalValue}
+        onChangeText={setGoalValue}
         placeholder="Introduce your goal..."
       />
       <Typography

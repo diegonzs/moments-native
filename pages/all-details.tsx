@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { cx } from 'classix'
 import { Pressable, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
@@ -7,10 +7,13 @@ import CloseIcon from '../components/icons/close'
 import { Row } from '../components/row'
 import { ScreenLayout } from '../components/screen-layout'
 import { Typography } from '../components/typography'
+import { emotionToEmoji } from '../constants/emotions'
+import { useMomentById } from '../hooks/moments'
 import { GroupType } from '../types'
 import { RootStackScreenProps, RouteName } from '../types/routes'
 
 type navigationType = RootStackScreenProps<RouteName.AllDetails>['navigation']
+type routeType = RootStackScreenProps<RouteName.AllDetails>['route']
 
 const RowTitle: React.FC<{ title: string }> = ({ title }) => {
   return (
@@ -108,13 +111,17 @@ const RowList: React.FC<RowListProps> = ({
 
 export const AllDetails: React.FC = () => {
   const nav = useNavigation<navigationType>()
+  const route = useRoute<routeType>()
+  const momentId = route.params.id
+  const moment = useMomentById(momentId)
+  const emotion = moment.emotion ? emotionToEmoji(moment.emotion) : ''
   const onPressBack = () => {
     if (nav.canGoBack) return nav.goBack()
     return nav.navigate(RouteName.Tabs, { screen: RouteName.Home })
   }
   const data: RowListProps[] = [
     {
-      title: 'Proces',
+      title: 'Processes',
       data: [{ title: 'Get a car' }, { title: 'Get a new job' }],
       footer: {
         label: 'Add',
@@ -127,11 +134,10 @@ export const AllDetails: React.FC = () => {
     },
     {
       title: 'Emotion',
-      data: '',
+      data: emotion,
       footer: {
-        label: 'Add',
-        onPress: () =>
-          nav.navigate(RouteName.AddEmotion, { momentId: 'asdasd' }),
+        label: emotion ? 'Change' : 'Add',
+        onPress: () => nav.navigate(RouteName.AddEmotion, { momentId }),
       },
     },
     {
@@ -141,7 +147,7 @@ export const AllDetails: React.FC = () => {
         label: 'Add',
         onPress: () =>
           nav.navigate(RouteName.AddType, {
-            momentId: 'sdafsdf',
+            momentId,
             type: GroupType.Tags,
           }),
       },
@@ -153,7 +159,7 @@ export const AllDetails: React.FC = () => {
         label: 'Add',
         onPress: () =>
           nav.navigate(RouteName.AddType, {
-            momentId: 'asdfasdf',
+            momentId,
             type: GroupType.Index,
           }),
       },
@@ -165,7 +171,7 @@ export const AllDetails: React.FC = () => {
         label: 'Select',
         onPress: () =>
           nav.navigate(RouteName.PinnedSelect, {
-            momentId: 'asdasd',
+            momentId,
           }),
       },
     },
@@ -174,8 +180,7 @@ export const AllDetails: React.FC = () => {
       data: 'Disabled',
       footer: {
         label: 'Change',
-        onPress: () =>
-          nav.navigate(RouteName.RememberMe, { momentId: 'asdasd' }),
+        onPress: () => nav.navigate(RouteName.RememberMe, { momentId }),
       },
     },
     {

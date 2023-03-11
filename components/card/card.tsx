@@ -1,17 +1,29 @@
 import { useNavigation } from '@react-navigation/native'
 import { Pressable } from 'react-native'
 
+import { Moment } from '../../models'
 import { RootTabScreenProps, RouteName } from '../../types/routes'
 import { Column } from '../column'
+import { Row } from '../row'
 import { Tag } from '../tag'
 import { Typography } from '../typography'
 
 type ScreenNavigationType = RootTabScreenProps<RouteName.Home>['navigation']
 
-export const Card: React.FC = () => {
+interface CardProps {
+  moment?: Moment & Realm.Object
+}
+
+export const Card: React.FC<CardProps> = ({ moment }) => {
   const nav = useNavigation<ScreenNavigationType>()
+  const id = moment?._id.toHexString()
+  const date = moment?.createdAt.toDateString() ?? '20 APR'
+  const tags = moment?.hashtags.map((tag) => tag.text) ?? ['Phrases']
+  const content =
+    moment?.content ||
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis et cursus blandit nibh...'
   const goToDetailsMoment = () => {
-    nav.navigate(RouteName.MomentDetails, { isEditMode: false, id: '1' })
+    nav.navigate(RouteName.MomentDetails, { isEditMode: false, id })
   }
   return (
     <Pressable onPress={goToDetailsMoment}>
@@ -21,16 +33,19 @@ export const Card: React.FC = () => {
           variant="caption"
           className="text-primary-40 mb-2"
         >
-          20 APR
+          {date}
         </Typography>
-        <Tag content="Phrases" />
+        <Row>
+          {tags.map((tag) => (
+            <Tag key={tag} content={tag} />
+          ))}
+        </Row>
         <Typography
           variant="content"
           weight="400"
           className="text-primary mt-2"
         >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quis et
-          cursus blandit nibh...
+          {content}
         </Typography>
       </Column>
     </Pressable>

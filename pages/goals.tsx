@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
-import { Pressable, View } from 'react-native'
+import { FlatList, Pressable, View } from 'react-native'
 
 import { Column } from '../components/column'
 import { GoalItem } from '../components/goal-item'
@@ -8,15 +8,19 @@ import PlusIcon from '../components/icons/plus'
 import { Row } from '../components/row'
 import { ScreenLayout } from '../components/screen-layout'
 import { Typography } from '../components/typography'
+import { useAllGoals } from '../hooks/goals'
 import { RootTabScreenProps, RouteName } from '../types/routes'
 
 type navigationType = RootTabScreenProps<RouteName.Goals>['navigation']
 
 export const Goals = () => {
   const nav = useNavigation<navigationType>()
+  const goals = useAllGoals()
+
   const goToCreateGoals = () => nav.navigate(RouteName.CreateGoal)
+
   return (
-    <ScreenLayout>
+    <ScreenLayout withScroll={false}>
       <Row className="justify-between items-center mb-4">
         <Typography variant="title" weight="700" className="text-primary">
           Goals
@@ -32,17 +36,12 @@ export const Goals = () => {
         </Typography>
       </Row>
       <Column>
-        <GoalItem content="Create personal brand" />
-        <View className="h-6" />
-        <GoalItem content="Learn 3D design" />
-        <View className="h-6" />
-        <GoalItem
-          content="Learn video production"
-          isCompleted
-          date="24th November"
+        <FlatList
+          data={goals}
+          keyExtractor={(goal) => goal._id.toHexString()}
+          ItemSeparatorComponent={() => <View className="h-6" />}
+          renderItem={({ item: goal }) => <GoalItem goal={goal} />}
         />
-        <View className="h-6" />
-        <GoalItem content="Buy a new car" />
       </Column>
     </ScreenLayout>
   )

@@ -10,14 +10,29 @@ interface SwitchOptionsProps {
   title: string
   description: string
   isDisabled?: boolean
+  defaultValue?: boolean
+  onPress?: (newState: boolean) => void
+  value?: boolean
 }
 
 export const SwitchOption: React.FC<SwitchOptionsProps> = ({
   title,
   description,
   isDisabled = false,
+  defaultValue = false,
+  value,
+  onPress,
 }) => {
-  const [isActive, setIsActive] = useState<boolean>(false)
+  const [isActive, setIsActive] = useState<boolean>(defaultValue)
+  const value_ = value ?? isActive
+  const handlePress = () => {
+    if (!isDisabled) {
+      setIsActive((newState) => {
+        onPress && onPress(!newState)
+        return !newState
+      })
+    }
+  }
   return (
     <Row className="justify-between">
       <Column className={cx('max-w-[180px]', isDisabled && 'opacity-40')}>
@@ -33,9 +48,9 @@ export const SwitchOption: React.FC<SwitchOptionsProps> = ({
         </Typography>
       </Column>
       <Switcher
-        isActive={isActive}
+        isActive={value_}
         isDisabled={isDisabled}
-        onPress={() => setIsActive((val) => !val)}
+        onPress={handlePress}
       />
     </Row>
   )

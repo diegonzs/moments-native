@@ -9,6 +9,8 @@ import { Input } from '../components/input'
 import { Row } from '../components/row'
 import { ScreenLayout } from '../components/screen-layout'
 import { Typography } from '../components/typography'
+import { happyEmotions, sadEmotions } from '../constants/emotions'
+import { useAddEmotion, useMomentById } from '../hooks/moments'
 import { RootStackScreenProps, RouteName } from '../types/routes'
 
 type navigationType = RootStackScreenProps<RouteName.AddEmotion>['navigation']
@@ -17,118 +19,50 @@ type routeType = RootStackScreenProps<RouteName.AddEmotion>['route']
 interface EmotionProps {
   title: string
   emoji: string
+  onPress: (title: string) => void
 }
 
-const happyEmotions: EmotionProps[] = [
-  {
-    title: 'happy',
-    emoji: '😄',
-  },
-  {
-    title: 'good',
-    emoji: '😏',
-  },
-  {
-    title: 'amazing',
-    emoji: '🤩',
-  },
-  {
-    title: 'yummy',
-    emoji: '🤤',
-  },
-]
-
-const sadEmotions: EmotionProps[] = [
-  {
-    title: 'awkward',
-    emoji: '😅',
-  },
-  {
-    title: 'tired',
-    emoji: '😩',
-  },
-  {
-    title: 'shocked',
-    emoji: '😦',
-  },
-  {
-    title: 'bored',
-    emoji: '🥱',
-  },
-  {
-    title: 'confused',
-    emoji: '😕',
-  },
-  {
-    title: 'focused',
-    emoji: '🤔',
-  },
-  {
-    title: 'disappointed',
-    emoji: '😔',
-  },
-  {
-    title: 'down',
-    emoji: '☹️',
-  },
-  {
-    title: 'stressed',
-    emoji: '😪',
-  },
-
-  {
-    title: 'angry',
-    emoji: '😠',
-  },
-  {
-    title: 'disgusted',
-    emoji: '🤮',
-  },
-  {
-    title: 'scared',
-    emoji: '😱',
-  },
-  {
-    title: 'anxious',
-    emoji: '😓',
-  },
-  {
-    title: 'sad',
-    emoji: '😭',
-  },
-  {
-    title: 'sick',
-    emoji: '😷',
-  },
-  {
-    title: 'hurt',
-    emoji: '🤕',
-  },
-]
-
-const Emotion: React.FC<EmotionProps> = ({ emoji, title }) => {
+const Emotion: React.FC<EmotionProps> = ({ emoji, title, onPress }) => {
+  const handlePress = () => onPress(title)
   return (
-    <Column className="items-center mb-5" style={{ width: 87 }}>
-      <Text style={{ fontSize: 30, marginBottom: 12 }}>{emoji}</Text>
-      <Typography variant="caption" weight="500" className="text-primary-light">
-        {title}
-      </Typography>
-    </Column>
+    <Pressable onPress={handlePress} hitSlop={10}>
+      <Column className="items-center mb-5" style={{ width: 87 }}>
+        <Text style={{ fontSize: 30, marginBottom: 12 }}>{emoji}</Text>
+        <Typography
+          variant="caption"
+          weight="500"
+          className="text-primary-light"
+        >
+          {title}
+        </Typography>
+      </Column>
+    </Pressable>
   )
 }
 
 export const AddEmotion = () => {
   const nav = useNavigation<navigationType>()
   const route = useRoute<routeType>()
+  const momentId = route.params.momentId
+
+  const moment = useMomentById(momentId)
+  const addEmotion = useAddEmotion()
+
   const [search, setSearch] = useState<string>('')
 
   const onPressBack = () => {
     if (nav.canGoBack) return nav.goBack()
-    nav.navigate(RouteName.AllDetails, { id: route.params.momentId })
+    nav.navigate(RouteName.AllDetails, { id: momentId })
+  }
+
+  const handleAddEmotion = (emotion: string) => {
+    if (!moment) return
+    addEmotion(emotion, moment)
+    onPressBack()
   }
 
   useEffect(() => {
-    if (!route.params.momentId) {
+    if (!momentId || !moment) {
       nav.navigate(RouteName.Tabs, { screen: RouteName.Home })
     }
   }, [])
@@ -140,7 +74,7 @@ export const AddEmotion = () => {
     emotion.title.includes(search.trim().toLowerCase()),
   )
 
-  if (!route.params.momentId) return
+  if (!momentId || !moment) return
 
   return (
     <ScreenLayout>
@@ -170,7 +104,11 @@ export const AddEmotion = () => {
         </Typography>
         <Row className="flex-wrap">
           {filteredHappyEmotions.map((emotion) => (
-            <Emotion key={emotion.title} {...emotion} />
+            <Emotion
+              key={emotion.title}
+              onPress={handleAddEmotion}
+              {...emotion}
+            />
           ))}
         </Row>
       </Column>
@@ -184,7 +122,11 @@ export const AddEmotion = () => {
         </Typography>
         <Row className="flex-wrap">
           {filterSadEmotions.map((emotion) => (
-            <Emotion key={emotion.title} {...emotion} />
+            <Emotion
+              key={emotion.title}
+              onPress={handleAddEmotion}
+              {...emotion}
+            />
           ))}
         </Row>
       </Column>
