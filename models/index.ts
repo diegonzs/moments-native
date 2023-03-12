@@ -1,7 +1,7 @@
 import { createRealmContext } from '@realm/react'
 
 import { Goal } from './goal'
-import { hashtag } from './hashtag'
+import { Hashtag } from './hashtag'
 import { Indicator } from './indicator'
 import { Moment } from './moment'
 import { Process } from './process'
@@ -13,6 +13,6 @@ export * from './moment'
 export * from './process'
 
 export const AppRealmContext = createRealmContext({
-  schema: [Goal, hashtag, Process, Indicator, Moment],
+  schema: [Goal, Hashtag, Process, Indicator, Moment],
   deleteRealmIfMigrationNeeded: true,
 })

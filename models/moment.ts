@@ -1,6 +1,6 @@
 import Realm from 'realm'
 
-import { hashtag } from './hashtag'
+import { Hashtag } from './hashtag'
 import { Indicator } from './indicator'
 import { Process } from './process'
 
@@ -12,7 +12,7 @@ export class Moment extends Realm.Object<Moment> {
   createdAt: Date = new Date()
   updatedAt: Date = new Date()
   processes: Realm.List<Process>
-  hashtags: Realm.List<hashtag>
+  hashtags: Realm.List<Hashtag>
   indicator?: Realm.Object<Indicator>
   isPinnedProcess: boolean = false
   isPinnedHome: boolean = false
