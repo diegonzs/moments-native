@@ -9,8 +9,7 @@ import SearchIcon from '../components/icons/search'
 import { Row } from '../components/row'
 import { ScreenLayout } from '../components/screen-layout'
 import { Typography } from '../components/typography'
-import { useRealm } from '../hooks/realm-hooks'
-import { Moment } from '../models'
+import { useCreateMoment } from '../hooks/moments'
 import { RootTabScreenProps, RouteName } from '../types/routes'
 
 type navigationType = RootTabScreenProps<RouteName.Home>['navigation']
@@ -18,12 +17,9 @@ type navigationType = RootTabScreenProps<RouteName.Home>['navigation']
 export const Home = () => {
   const nav = useNavigation<navigationType>()
   const goToSearch = () => nav.navigate(RouteName.Search)
-  const realm = useRealm()
+  const createMoment = useCreateMoment()
   const goToMomentDetails = () => {
-    let moment: Moment & Realm.Object
-    realm.write(() => {
-      moment = realm.create<Moment>('Moment', {})
-    })
+    const moment = createMoment()
     nav.navigate(RouteName.MomentDetails, {
       id: moment._id.toHexString(),
       isEditMode: true,

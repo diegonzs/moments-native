@@ -8,8 +8,11 @@ import { Header } from '../components/moment-details'
 import { Footer } from '../components/moment-details/footer'
 import { ScreenLayout } from '../components/screen-layout'
 import { useDebounce } from '../hooks'
-import { useMomentById } from '../hooks/moments'
-import { useRealm } from '../hooks/realm-hooks'
+import {
+  useDeleteMoment,
+  useMomentById,
+  useUpdateMomentContent,
+} from '../hooks/moments'
 import colors from '../theme/colors'
 import { RootStackScreenProps, RouteName } from '../types/routes'
 
@@ -22,33 +25,26 @@ export const MomentDetails = () => {
   const nav = useNavigation<navigationType>()
   const momentId = route.params.id
   const isEditMode = route.params.isEditMode
-  const realm = useRealm()
   const moment = useMomentById(momentId)
+  const deleteMoment = useDeleteMoment()
+  const updateMomentContent = useUpdateMomentContent()
   const [value, setValue] = useState<string>(moment.content ?? '')
   const debouncedContent = useDebounce<string>(value, 1000)
 
   useEffect(() => {
     if (moment.content !== debouncedContent) {
-      realm.write(() => {
-        moment.content = debouncedContent
-      })
+      updateMomentContent(moment, debouncedContent)
     }
   }, [debouncedContent])
 
-  const deleteMoment = () => {
-    realm.write(() => {
-      realm.delete(moment)
-    })
-  }
-
   const onBackPress = () => {
     if (isEditMode && !value) {
-      deleteMoment()
+      deleteMoment(moment)
     }
   }
 
   const onDeletePress = () => {
-    deleteMoment()
+    deleteMoment(moment)
     return nav.navigate(RouteName.Tabs, { screen: RouteName.Home })
   }
 
