@@ -9,7 +9,7 @@ export class Process extends Realm.Object<Process> {
   updatedAt: Date = new Date()
   isActive: boolean = true
   isCompleted: boolean = false
-  moments: Realm.Results<Moment>
+  moments: Realm.Types.LinkingObjects<Moment, 'processes'>
 
   static primaryKey = '_id'
 

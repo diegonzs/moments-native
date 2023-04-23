@@ -9,7 +9,6 @@ import { ScreenLayout } from '../components/screen-layout'
 import { Typography } from '../components/typography'
 import { emotionToEmoji } from '../constants/emotions'
 import { useMomentById } from '../hooks/moments'
-import { GroupType } from '../types'
 import { RootStackScreenProps, RouteName } from '../types/routes'
 
 type navigationType = RootStackScreenProps<RouteName.AllDetails>['navigation']
@@ -87,6 +86,7 @@ const RowList: React.FC<RowListProps> = ({
       {Array.isArray(data) && (
         <FlatList
           data={data}
+          showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => <RowValue {...item} />}
           keyExtractor={({ title }) => title}
           ItemSeparatorComponent={() => <View className="w-2" />}
@@ -122,13 +122,12 @@ export const AllDetails: React.FC = () => {
   const data: RowListProps[] = [
     {
       title: 'Processes',
-      data: [{ title: 'Get a car' }, { title: 'Get a new job' }],
+      data: moment.processes.map((process) => ({ title: process.title })),
       footer: {
         label: 'Add',
         onPress: () =>
-          nav.navigate(RouteName.AddType, {
-            momentId: 'asd',
-            type: GroupType.Process,
+          nav.navigate(RouteName.AddProcess, {
+            momentId,
           }),
       },
     },
@@ -142,25 +141,23 @@ export const AllDetails: React.FC = () => {
     },
     {
       title: 'Tags',
-      data: [{ title: 'Food' }],
+      data: moment.hashtags.map((hashtag) => ({ title: hashtag.text })),
       footer: {
         label: 'Add',
         onPress: () =>
-          nav.navigate(RouteName.AddType, {
+          nav.navigate(RouteName.AddTag, {
             momentId,
-            type: GroupType.Tags,
           }),
       },
     },
     {
       title: 'Index',
-      data: [],
+      data: moment.indicator?.title ? [{ title: moment.indicator.title }] : [],
       footer: {
-        label: 'Add',
+        label: moment.indicator?._id ? 'Change' : 'Add',
         onPress: () =>
-          nav.navigate(RouteName.AddType, {
+          nav.navigate(RouteName.AddIndicator, {
             momentId,
-            type: GroupType.Index,
           }),
       },
     },

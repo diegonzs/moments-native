@@ -1,10 +1,18 @@
 import { useCallback } from 'react'
 
-import { Moment, Process } from '../models'
+import { Moment, Process, Hashtag, Indicator } from '../models'
 import { useObject, useRealm } from './realm-hooks'
 
 export const useMomentById = (id: string) => {
-  const moment = useObject(Moment, new Realm.BSON.UUID(id))
+  return useObject(Moment, new Realm.BSON.UUID(id))
+}
+
+export const useMomentByIdSnapshot = (id: string) => {
+  const realm = useRealm()
+  const moment = realm.objectForPrimaryKey<Moment>(
+    'Moment',
+    new Realm.BSON.UUID(id),
+  )
   return moment
 }
 
@@ -44,15 +52,6 @@ export const useUpdateMomentContent = () => {
   }, [])
 }
 
-export const useAddProcess = () => {
-  const realm = useRealm()
-  return useCallback((process: Process, moment: Moment) => {
-    realm.write(() => {
-      moment.processes.push(process)
-    })
-  }, [])
-}
-
 export const useCreateMoment = () => {
   const realm = useRealm()
   return useCallback(() => {
@@ -69,6 +68,66 @@ export const useDeleteMoment = () => {
   return useCallback((moment: Moment) => {
     realm.write(() => {
       realm.delete(moment)
+    })
+  }, [])
+}
+
+// Processes
+export const useAddProcessToMoment = () => {
+  const realm = useRealm()
+  return useCallback((process: Process, moment: Moment) => {
+    realm.write(() => {
+      if (moment.processes.findIndex((p) => p._id === process._id) !== -1)
+        return
+      moment.processes.push(process)
+    })
+  }, [])
+}
+
+export const useRemoveProcessFromMoment = () => {
+  const realm = useRealm()
+  return useCallback((process: Process, moment: Moment) => {
+    realm.write(() => {
+      moment.processes.splice(moment.processes.indexOf(process), 1)
+    })
+  }, [])
+}
+
+// Tags
+export const useAddTagToMoment = () => {
+  const realm = useRealm()
+  return useCallback((tag: Hashtag, moment: Moment) => {
+    realm.write(() => {
+      if (moment.hashtags.findIndex((t) => t._id === tag._id) !== -1) return
+      moment.hashtags.push(tag)
+    })
+  }, [])
+}
+
+export const useRemoveTagFromMoment = () => {
+  const realm = useRealm()
+  return useCallback((tag: Hashtag, moment: Moment) => {
+    realm.write(() => {
+      moment.hashtags.splice(moment.hashtags.indexOf(tag), 1)
+    })
+  }, [])
+}
+
+// Indicators
+export const useAddIndicatorToMoment = () => {
+  const realm = useRealm()
+  return useCallback((indicator: Indicator, moment: Moment) => {
+    realm.write(() => {
+      moment.indicator = indicator
+    })
+  }, [])
+}
+
+export const useRemoveIndicatorFromMoment = () => {
+  const realm = useRealm()
+  return useCallback((moment: Moment) => {
+    realm.write(() => {
+      moment.indicator = null
     })
   }, [])
 }

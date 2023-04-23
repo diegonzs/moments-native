@@ -7,7 +7,7 @@ export class Indicator extends Realm.Object<Indicator> {
   title: string
   createdAt: Date = new Date()
   updatedAt: Date = new Date()
-  moments: Realm.Results<Moment>
+  moments: Realm.Types.LinkingObjects<Moment, 'indicator'>
 
   static primaryKey = '_id'
 

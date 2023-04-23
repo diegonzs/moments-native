@@ -7,7 +7,7 @@ export class Hashtag extends Realm.Object {
   text: string
   createdAt: Date = new Date()
   updatedAt: Date = new Date()
-  moments: Realm.Results<Moment>
+  moments: Realm.Types.LinkingObjects<Moment, 'hashtags'>
 
   static primaryKey = '_id'
 

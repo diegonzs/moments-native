@@ -13,7 +13,7 @@ export class Moment extends Realm.Object<Moment> {
   updatedAt: Date = new Date()
   processes: Realm.List<Process>
   hashtags: Realm.List<Hashtag>
-  indicator?: Realm.Object<Indicator>
+  indicator?: Indicator
   isPinnedProcess: boolean = false
   isPinnedHome: boolean = false
   isRemindersEnabled: boolean = false

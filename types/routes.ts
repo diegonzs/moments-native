@@ -19,6 +19,9 @@ export enum RouteName {
   MomentDetails = 'MomentDetails',
   AllDetails = 'AllDetails',
   AddType = 'AddType',
+  AddProcess = 'AddProcess',
+  AddTag = 'AddTag',
+  AddIndicator = 'AddIndicator',
   RememberMe = 'RememberMe',
   PinnedSelect = 'PinnedSelect',
   PromptSelect = 'PromptSelect',
@@ -56,8 +59,13 @@ export type RouteStackParamList = {
   [RouteName.PromptSelect]: {
     momentId: string
   }
-  [RouteName.AddType]: {
-    type: string
+  [RouteName.AddProcess]: {
+    momentId: string
+  }
+  [RouteName.AddTag]: {
+    momentId: string
+  }
+  [RouteName.AddIndicator]: {
     momentId: string
   }
   [RouteName.TypeDetails]: {

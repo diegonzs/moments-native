@@ -1,7 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import { AddEmotion } from '../pages/add-emotion'
-import { AddType } from '../pages/add-type'
+import { AddIndicator } from '../pages/add-indicator'
+import { AddProcess } from '../pages/add-process'
+import { AddTag } from '../pages/add-tags'
 import { AllDetails } from '../pages/all-details'
 import { CreateGoal } from '../pages/create-goal'
 import { TypeDetails } from '../pages/memories/type-details'
@@ -34,7 +36,9 @@ export const AppStack = () => {
         <Stack.Screen name={RouteName.Search} component={SearachPage} />
         <Stack.Screen name={RouteName.CreateGoal} component={CreateGoal} />
         <Stack.Screen name={RouteName.AllDetails} component={AllDetails} />
-        <Stack.Screen name={RouteName.AddType} component={AddType} />
+        <Stack.Screen name={RouteName.AddProcess} component={AddProcess} />
+        <Stack.Screen name={RouteName.AddTag} component={AddTag} />
+        <Stack.Screen name={RouteName.AddIndicator} component={AddIndicator} />
         <Stack.Screen name={RouteName.RememberMe} component={RememberMe} />
         <Stack.Screen name={RouteName.PinnedSelect} component={PinnedSelect} />
         <Stack.Screen name={RouteName.PromptSelect} component={PromptSelect} />
