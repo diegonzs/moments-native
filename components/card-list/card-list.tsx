@@ -11,8 +11,11 @@ interface CardListProps {
 }
 
 export const CardList: React.FC<CardListProps> = ({ moments }) => {
-  const momentsLeft = moments.slice(0, moments.length / 2)
-  const momentsRight = moments.slice(moments.length / 2, moments.length)
+  const momentsLeft = moments.slice(0, Math.round(moments.length / 2))
+  const momentsRight = moments.slice(
+    Math.round(moments.length / 2),
+    moments.length,
+  )
 
   return (
     <Row className="justify-between">
