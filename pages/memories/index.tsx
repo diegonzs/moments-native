@@ -3,16 +3,18 @@ import { cx } from 'classix'
 import React from 'react'
 import { Pressable, TouchableOpacity, View } from 'react-native'
 
-import { CardList } from '../../components/card-list'
 import { Column } from '../../components/column'
 import CalendarIcon from '../../components/icons/calendar'
 import SearchIcon from '../../components/icons/search'
+import {
+  AllHashtags,
+  AllIndicators,
+  AllMoments,
+  AllProcesses,
+} from '../../components/memories-type'
 import { Row } from '../../components/row'
 import { ScreenLayout } from '../../components/screen-layout'
-import {
-  TitleCount,
-  TitleCountOnPressProps,
-} from '../../components/title-count'
+import { TitleCountOnPressProps } from '../../components/title-count'
 import { Typography } from '../../components/typography'
 import { useAppStore } from '../../store/useStore'
 import { MemoriesOptions } from '../../types'
@@ -25,29 +27,6 @@ const options: MemoriesOptions[] = [
   MemoriesOptions.Index,
 ]
 
-const mockCountItems: { id: string; title: string; count: number }[] = [
-  {
-    id: '1',
-    title: 'Financial Freedom',
-    count: 4,
-  },
-  {
-    id: '2',
-    title: 'Getting a new job in tec...',
-    count: 5,
-  },
-  {
-    id: '3',
-    title: 'Health',
-    count: 154,
-  },
-  {
-    id: '4',
-    title: 'Move to NY',
-    count: 1,
-  },
-]
-
 type navigationType = RootTabScreenProps<RouteName.Memories>['navigation']
 
 export const Memories = () => {
@@ -57,7 +36,6 @@ export const Memories = () => {
     (state) => state.setCurrentMemoriesOption,
   )
   const isCurrentOption = (option: MemoriesOptions) => option === currentOption
-  const isAll = currentOption === MemoriesOptions.All
   const onPressSearch = () => nav.navigate(RouteName.Search)
   const onPressItem = ({ id, type }: TitleCountOnPressProps) => {
     nav.navigate(RouteName.TypeDetails, {
@@ -100,21 +78,15 @@ export const Memories = () => {
           </Column>
         ))}
       </Row>
-      {isAll ? (
-        <CardList />
-      ) : (
-        <>
-          {mockCountItems.map((item) => (
-            <React.Fragment key={item.title}>
-              <TitleCount
-                {...item}
-                type={currentOption}
-                onPress={onPressItem}
-              />
-              <View className="h-4" />
-            </React.Fragment>
-          ))}
-        </>
+      {currentOption === MemoriesOptions.All && <AllMoments />}
+      {currentOption === MemoriesOptions.Process && (
+        <AllProcesses onPressItem={onPressItem} />
+      )}
+      {currentOption === MemoriesOptions.Tags && (
+        <AllHashtags onPressItem={onPressItem} />
+      )}
+      {currentOption === MemoriesOptions.Index && (
+        <AllIndicators onPressItem={onPressItem} />
       )}
     </ScreenLayout>
   )

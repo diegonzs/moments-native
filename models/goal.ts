@@ -14,3 +14,5 @@ export class Goal extends Realm.Object<Goal> {
     super(realm, { title: props.title })
   }
 }
+
+export type GoalQuery = Realm.Results<Goal & Realm.Object<unknown, never>>

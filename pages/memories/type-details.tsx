@@ -8,6 +8,8 @@ import PinIcon from '../../components/icons/pin'
 import { Row } from '../../components/row'
 import { ScreenLayout } from '../../components/screen-layout'
 import { Typography } from '../../components/typography'
+import { useQuery } from '../../hooks/realm-hooks'
+import { Moment } from '../../models'
 import { RootStackScreenProps, RouteName } from '../../types/routes'
 
 type navigationType = RootStackScreenProps<RouteName.TypeDetails>['navigation']
@@ -23,6 +25,7 @@ export const TypeDetails = () => {
     if (!route.params) return
     nav.navigate(RouteName.PinnedBoard, route.params)
   }
+  const moments = useQuery(Moment)
   return (
     <ScreenLayout>
       <Row className="justify-between items-center mb-2">
@@ -42,7 +45,7 @@ export const TypeDetails = () => {
       <Typography variant="body" weight="600" className="text-primary-40 mb-6">
         8 moments
       </Typography>
-      <CardList />
+      <CardList moments={moments} />
     </ScreenLayout>
   )
 }

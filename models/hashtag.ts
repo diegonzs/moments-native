@@ -15,3 +15,5 @@ export class Hashtag extends Realm.Object {
     super(realm, { text })
   }
 }
+
+export type HashtagQuery = Realm.Results<Hashtag & Realm.Object<unknown, never>>

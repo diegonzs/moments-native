@@ -1,14 +1,16 @@
 import { Fragment } from 'react'
 import { View } from 'react-native'
 
-import { useQuery } from '../../hooks/realm-hooks'
 import { Moment } from '../../models'
 import { Card } from '../card'
 import { Column } from '../column'
 import { Row } from '../row'
 
-export const CardList = () => {
-  const moments = useQuery(Moment)
+interface CardListProps {
+  moments: Realm.Results<Moment & Realm.Object<unknown, never>>
+}
+
+export const CardList: React.FC<CardListProps> = ({ moments }) => {
   const momentsLeft = moments.slice(0, moments.length / 2)
   const momentsRight = moments.slice(moments.length / 2, moments.length)
 

@@ -24,3 +24,5 @@ export class Moment extends Realm.Object<Moment> {
     super(realm, {})
   }
 }
+
+export type MomentQuery = Realm.Results<Moment & Realm.Object<unknown, never>>

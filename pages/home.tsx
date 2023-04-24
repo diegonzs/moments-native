@@ -10,6 +10,8 @@ import { Row } from '../components/row'
 import { ScreenLayout } from '../components/screen-layout'
 import { Typography } from '../components/typography'
 import { useCreateMoment } from '../hooks/moments'
+import { useQuery } from '../hooks/realm-hooks'
+import { Moment } from '../models'
 import { RootTabScreenProps, RouteName } from '../types/routes'
 
 type navigationType = RootTabScreenProps<RouteName.Home>['navigation']
@@ -18,6 +20,8 @@ export const Home = () => {
   const nav = useNavigation<navigationType>()
   const goToSearch = () => nav.navigate(RouteName.Search)
   const createMoment = useCreateMoment()
+  const moments = useQuery(Moment)
+  const filteredMoments = moments.filtered('isPinnedHome == true')
   const goToMomentDetails = () => {
     const moment = createMoment()
     nav.navigate(RouteName.MomentDetails, {
@@ -59,11 +63,11 @@ export const Home = () => {
           variant="caption"
           weight="400"
         >
-          3 pinned
+          {filteredMoments.length} pinned
         </Typography>
       </Row>
       <View className="px-5">
-        <CardList />
+        <CardList moments={filteredMoments} />
       </View>
     </ScreenLayout>
   )

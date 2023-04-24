@@ -17,3 +17,5 @@ export class Process extends Realm.Object<Process> {
     super(realm, { title })
   }
 }
+
+export type ProcessQuery = Realm.Results<Process & Realm.Object<unknown, never>>

@@ -8,7 +8,7 @@ export type TitleCountOnPressProps = {
   type: string
 }
 
-interface TitleCountProps {
+export interface TitleCountProps {
   id: string
   type: string
   count: number

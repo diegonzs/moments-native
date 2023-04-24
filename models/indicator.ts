@@ -15,3 +15,7 @@ export class Indicator extends Realm.Object<Indicator> {
     super(realm, { title })
   }
 }
+
+export type IndicatorQuery = Realm.Results<
+  Indicator & Realm.Object<unknown, never>
+>

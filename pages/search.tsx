@@ -12,6 +12,8 @@ import { RowTab } from '../components/row-tab'
 import { ScreenLayout } from '../components/screen-layout'
 import { TitleCount, TitleCountOnPressProps } from '../components/title-count'
 import { Typography } from '../components/typography'
+import { useQuery } from '../hooks/realm-hooks'
+import { Moment } from '../models'
 import { SearchOptions } from '../types'
 import { RootStackScreenProps, RouteName } from '../types/routes'
 
@@ -54,7 +56,7 @@ export const SearachPage = () => {
   )
   const inputRef = useRef<TextInput | null>(null)
   const nav = useNavigation<navigationType>()
-
+  const moments = useQuery(Moment)
   const onPressClose = () => {
     if (nav.canGoBack) return nav.goBack()
     nav.navigate(RouteName.Tabs, { screen: RouteName.Memories })
@@ -101,7 +103,7 @@ export const SearachPage = () => {
             setCurrentOption={setCurrentOption}
           />
           {isMoments ? (
-            <CardList />
+            <CardList moments={moments} />
           ) : (
             <>
               {mockCountItems.map((item) => (
