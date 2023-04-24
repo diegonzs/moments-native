@@ -9,9 +9,7 @@ import SearchIcon from '../components/icons/search'
 import { Row } from '../components/row'
 import { ScreenLayout } from '../components/screen-layout'
 import { Typography } from '../components/typography'
-import { useCreateMoment } from '../hooks/moments'
-import { useQuery } from '../hooks/realm-hooks'
-import { Moment } from '../models'
+import { useAllMoments, useCreateMoment } from '../hooks/moments'
 import { RootTabScreenProps, RouteName } from '../types/routes'
 
 type navigationType = RootTabScreenProps<RouteName.Home>['navigation']
@@ -20,7 +18,7 @@ export const Home = () => {
   const nav = useNavigation<navigationType>()
   const goToSearch = () => nav.navigate(RouteName.Search)
   const createMoment = useCreateMoment()
-  const moments = useQuery(Moment)
+  const moments = useAllMoments()
   const filteredMoments = moments.filtered('isPinnedHome == true')
   const goToMomentDetails = () => {
     const moment = createMoment()

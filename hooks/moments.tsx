@@ -1,7 +1,11 @@
 import { useCallback } from 'react'
 
 import { Moment, Process, Hashtag, Indicator } from '../models'
-import { useObject, useRealm } from './realm-hooks'
+import { useObject, useQuery, useRealm } from './realm-hooks'
+
+export const useAllMoments = () => {
+  return useQuery(Moment)
+}
 
 export const useMomentById = (id: string) => {
   return useObject(Moment, new Realm.BSON.UUID(id))

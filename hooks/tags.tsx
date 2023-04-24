@@ -2,10 +2,14 @@ import { useCallback } from 'react'
 
 import { Hashtag } from '../models'
 import { useAddTagToMoment, useMomentByIdSnapshot } from './moments'
-import { useQuery, useRealm } from './realm-hooks'
+import { useObject, useQuery, useRealm } from './realm-hooks'
 
 export const useAllTags = () => {
   return useQuery(Hashtag)
+}
+
+export const useTagById = (id: string) => {
+  return useObject(Hashtag, new Realm.BSON.UUID(id))
 }
 
 export const useCreateTagOnMoment = (momentId: string) => {

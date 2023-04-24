@@ -6,7 +6,6 @@ import { KeyboardAccessoryView } from 'react-native-keyboard-accessory'
 
 import { useBottomSheet } from '../../../hooks'
 import colors from '../../../theme/colors'
-import { GroupType } from '../../../types'
 import { RootStackScreenProps, RouteName } from '../../../types/routes'
 import DeleteIcon from '../../icons/delete'
 import EditIcon from '../../icons/edit'
@@ -52,13 +51,8 @@ export const Footer: React.FC<FooterProps> = ({
   const goToAllDetails = () => {
     nav.navigate(RouteName.AllDetails, { id: momentId })
   }
-
-  const goToAddType = (type: GroupType) => {
-    nav.navigate(RouteName.AddType, {
-      momentId,
-      type,
-    })
-  }
+  const goToAddTag = () => nav.navigate(RouteName.AddTag, { momentId })
+  const goToAddProcess = () => nav.navigate(RouteName.AddProcess, { momentId })
 
   const goToPrompt = () => {
     nav.navigate(RouteName.PromptSelect, { momentId })
@@ -81,13 +75,13 @@ export const Footer: React.FC<FooterProps> = ({
               id: 'tags',
               title: 'Set tags',
               icon: <TagIcon className="text-secondary-dark" />,
-              action: () => goToAddType(GroupType.Tags),
+              action: goToAddTag,
             },
             {
               id: 'process',
               title: 'Process',
               icon: <RocketIcon className="text-secondary-dark" />,
-              action: () => goToAddType(GroupType.Process),
+              action: goToAddProcess,
             },
             {
               id: 'image',

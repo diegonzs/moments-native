@@ -8,8 +8,8 @@ import PinIcon from '../../components/icons/pin'
 import { Row } from '../../components/row'
 import { ScreenLayout } from '../../components/screen-layout'
 import { Typography } from '../../components/typography'
-import { useQuery } from '../../hooks/realm-hooks'
-import { Moment } from '../../models'
+import { useMemoriesTypeDetails } from '../../hooks/useMemoriesTypeDetails'
+import { MemoriesOptions } from '../../types'
 import { RootStackScreenProps, RouteName } from '../../types/routes'
 
 type navigationType = RootStackScreenProps<RouteName.TypeDetails>['navigation']
@@ -18,6 +18,10 @@ type routeType = RootStackScreenProps<RouteName.TypeDetails>['route']
 export const TypeDetails = () => {
   const nav = useNavigation<navigationType>()
   const route = useRoute<routeType>()
+  const details = useMemoriesTypeDetails({
+    type: route.params.type,
+    id: route.params.id,
+  })
   const onPressBackIcon = () => {
     nav.navigate(RouteName.Tabs, { screen: RouteName.Memories })
   }
@@ -25,7 +29,8 @@ export const TypeDetails = () => {
     if (!route.params) return
     nav.navigate(RouteName.PinnedBoard, route.params)
   }
-  const moments = useQuery(Moment)
+  const isProcess = route.params.type === MemoriesOptions.Process
+
   return (
     <ScreenLayout>
       <Row className="justify-between items-center mb-2">
@@ -33,19 +38,21 @@ export const TypeDetails = () => {
           <BackArrowIcon className="text-primary p-2" />
         </Pressable>
         <Row className="items-center">
-          <Pressable onPress={onPressPin}>
-            <PinIcon className="mr-4 text-primary" />
-          </Pressable>
+          {isProcess && (
+            <Pressable onPress={onPressPin}>
+              <PinIcon className="mr-4 text-primary" />
+            </Pressable>
+          )}
           <EditIcon className="text-primary" />
         </Row>
       </Row>
       <Typography variant="title" weight="700" className="text-primary mb-2">
-        Financial Freedom
+        {details.title}
       </Typography>
       <Typography variant="body" weight="600" className="text-primary-40 mb-6">
-        8 moments
+        {details.moments.length} moments
       </Typography>
-      <CardList moments={moments} />
+      <CardList moments={details.moments} />
     </ScreenLayout>
   )
 }

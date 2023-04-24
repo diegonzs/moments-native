@@ -11,7 +11,7 @@ import { Typography } from '../typography'
 type ScreenNavigationType = RootTabScreenProps<RouteName.Home>['navigation']
 
 interface CardProps {
-  moment?: Moment & Realm.Object
+  moment?: Moment
 }
 
 export const Card: React.FC<CardProps> = ({ moment }) => {

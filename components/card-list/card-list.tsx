@@ -1,13 +1,13 @@
 import { Fragment } from 'react'
 import { View } from 'react-native'
 
-import { Moment } from '../../models'
+import { Moment, MomentQuery } from '../../models'
 import { Card } from '../card'
 import { Column } from '../column'
 import { Row } from '../row'
 
 interface CardListProps {
-  moments: Realm.Results<Moment & Realm.Object<unknown, never>>
+  moments: MomentQuery | Realm.Results<Moment> | Moment[]
 }
 
 export const CardList: React.FC<CardListProps> = ({ moments }) => {

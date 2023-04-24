@@ -2,10 +2,14 @@ import { useCallback } from 'react'
 
 import { Process } from '../models'
 import { useAddProcessToMoment, useMomentByIdSnapshot } from './moments'
-import { useQuery, useRealm } from './realm-hooks'
+import { useObject, useQuery, useRealm } from './realm-hooks'
 
 export const useAllProcesses = () => {
   return useQuery(Process)
+}
+
+export const useProcessById = (id: string) => {
+  return useObject(Process, new Realm.BSON.UUID(id))
 }
 
 export const useCreateProcessOnMoment = (momentId: string) => {

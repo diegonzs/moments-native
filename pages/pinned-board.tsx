@@ -6,8 +6,7 @@ import CloseIcon from '../components/icons/close'
 import { Row } from '../components/row'
 import { ScreenLayout } from '../components/screen-layout'
 import { Typography } from '../components/typography'
-import { useQuery } from '../hooks/realm-hooks'
-import { Moment } from '../models'
+import { useProcessById } from '../hooks/process'
 import { RootStackScreenProps, RouteName } from '../types/routes'
 
 type navigationType = RootStackScreenProps<RouteName.PinnedBoard>['navigation']
@@ -16,7 +15,8 @@ type routeType = RootStackScreenProps<RouteName.PinnedBoard>['route']
 export const PinnedBoard = () => {
   const nav = useNavigation<navigationType>()
   const route = useRoute<routeType>()
-  const moments = useQuery(Moment)
+  const process = useProcessById(route.params.id)
+  const moments = process.moments.filter((moment) => moment.isPinnedProcess)
   const onPressClose = () => {
     if (nav.canGoBack) return nav.goBack()
     if (!route.params) {
@@ -36,7 +36,7 @@ export const PinnedBoard = () => {
         Pinned Board
       </Typography>
       <Typography variant="body" weight="600" className="text-primary-40 mb-8">
-        Financial Freedom
+        {process.title}
       </Typography>
       <CardList moments={moments} />
     </ScreenLayout>
