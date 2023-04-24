@@ -14,7 +14,7 @@ export enum RouteName {
   Settings = 'Settings',
   TypeDetails = 'TypeDetails',
   PinnedBoard = 'PinnedBoard',
-  Search = 'Searach',
+  Search = 'Search',
   CreateGoal = 'CreateGoal',
   MomentDetails = 'MomentDetails',
   AllDetails = 'AllDetails',
