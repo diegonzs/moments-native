@@ -1,5 +1,5 @@
-import { useQuery } from '../../hooks/realm-hooks'
-import { Hashtag, HashtagQuery } from '../../models'
+import { useAllTags } from '../../hooks/tags'
+import { HashtagQuery } from '../../models'
 import { MemoriesOptions } from '../../types'
 import {
   TitleCountProps,
@@ -19,11 +19,16 @@ const formatHashtags = (
 
 interface allHashtagsProps {
   onPressItem: (props: TitleCountOnPressProps) => void
+  search?: string
 }
 
-export const AllHashtags: React.FC<allHashtagsProps> = ({ onPressItem }) => {
-  const hashtags = useQuery(Hashtag)
-  const formattedHashtags = formatHashtags(hashtags)
+export const AllHashtags: React.FC<allHashtagsProps> = ({
+  onPressItem,
+  search = '',
+}) => {
+  const hashtags = useAllTags()
+  const filteredHashtags = hashtags.filtered('text CONTAINS[c] $0', search)
+  const formattedHashtags = formatHashtags(filteredHashtags)
   return (
     <>
       {formattedHashtags.map((hashtag) => (

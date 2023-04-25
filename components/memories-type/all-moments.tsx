@@ -1,8 +1,12 @@
-import { useQuery } from '../../hooks/realm-hooks'
-import { Moment } from '../../models'
+import { useAllMoments } from '../../hooks/moments'
 import { CardList } from '../card-list'
 
-export const AllMoments = () => {
-  const moments = useQuery(Moment)
-  return <CardList moments={moments} />
+interface AllMomentsProps {
+  search?: string
+}
+
+export const AllMoments: React.FC<AllMomentsProps> = ({ search = '' }) => {
+  const moments = useAllMoments()
+  const filteredMoments = moments.filtered('content CONTAINS[c] $0', search)
+  return <CardList moments={filteredMoments} />
 }

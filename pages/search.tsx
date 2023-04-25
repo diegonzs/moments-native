@@ -1,18 +1,22 @@
 import { useNavigation } from '@react-navigation/native'
-import { useEffect, useRef, useState, Fragment } from 'react'
-import { TextInput, Pressable, View } from 'react-native'
+import { useEffect, useRef, useState } from 'react'
+import { TextInput, Pressable } from 'react-native'
 
-import { CardList } from '../components/card-list'
 import { Column } from '../components/column'
 import CloseIcon from '../components/icons/close'
 import SearchIcon from '../components/icons/search'
 import { Input } from '../components/input'
+import {
+  AllHashtags,
+  AllIndicators,
+  AllMoments,
+  AllProcesses,
+} from '../components/memories-type'
 import { Row } from '../components/row'
 import { RowTab } from '../components/row-tab'
 import { ScreenLayout } from '../components/screen-layout'
-import { TitleCount, TitleCountOnPressProps } from '../components/title-count'
+import { TitleCountOnPressProps } from '../components/title-count'
 import { Typography } from '../components/typography'
-import { useAllMoments } from '../hooks/moments'
 import { SearchOptions } from '../types'
 import { RootStackScreenProps, RouteName } from '../types/routes'
 
@@ -25,29 +29,6 @@ const options: SearchOptions[] = [
   SearchOptions.Index,
 ]
 
-const mockCountItems: { id: string; title: string; count: number }[] = [
-  {
-    id: '1',
-    title: 'Financial Freedom',
-    count: 4,
-  },
-  {
-    id: '2',
-    title: 'Getting a new job in tec...',
-    count: 5,
-  },
-  {
-    id: '3',
-    title: 'Health',
-    count: 154,
-  },
-  {
-    id: '4',
-    title: 'Move to NY',
-    count: 1,
-  },
-]
-
 export const SearachPage = () => {
   const [value, setValue] = useState<string>('')
   const [currentOption, setCurrentOption] = useState<string>(
@@ -55,7 +36,7 @@ export const SearachPage = () => {
   )
   const inputRef = useRef<TextInput | null>(null)
   const nav = useNavigation<navigationType>()
-  const moments = useAllMoments()
+
   const onPressClose = () => {
     if (nav.canGoBack) return nav.goBack()
     nav.navigate(RouteName.Tabs, { screen: RouteName.Memories })
@@ -67,8 +48,6 @@ export const SearachPage = () => {
       type,
     })
   }
-
-  const isMoments = currentOption === SearchOptions.Moments
 
   useEffect(() => {
     inputRef.current?.focus()
@@ -101,21 +80,17 @@ export const SearachPage = () => {
             currentOption={currentOption}
             setCurrentOption={setCurrentOption}
           />
-          {isMoments ? (
-            <CardList moments={moments} />
-          ) : (
-            <>
-              {mockCountItems.map((item) => (
-                <Fragment key={item.title}>
-                  <TitleCount
-                    {...item}
-                    type={currentOption}
-                    onPress={onPressItem}
-                  />
-                  <View className="h-4" />
-                </Fragment>
-              ))}
-            </>
+          {currentOption === SearchOptions.Moments && (
+            <AllMoments search={value} />
+          )}
+          {currentOption === SearchOptions.Process && (
+            <AllProcesses onPressItem={onPressItem} search={value} />
+          )}
+          {currentOption === SearchOptions.Tags && (
+            <AllHashtags onPressItem={onPressItem} search={value} />
+          )}
+          {currentOption === SearchOptions.Index && (
+            <AllIndicators onPressItem={onPressItem} search={value} />
           )}
         </Column>
       )}

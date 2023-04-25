@@ -1,5 +1,5 @@
-import { useQuery } from '../../hooks/realm-hooks'
-import { IndicatorQuery, Indicator } from '../../models'
+import { useAllIndicators } from '../../hooks/indicators'
+import { IndicatorQuery } from '../../models'
 import { MemoriesOptions } from '../../types'
 import {
   TitleCountProps,
@@ -19,22 +19,23 @@ const formatIndicator = (
 
 interface AllIndicatorsProps {
   onPressItem: (props: TitleCountOnPressProps) => void
+  search?: string
 }
 export const AllIndicators: React.FC<AllIndicatorsProps> = ({
   onPressItem,
+  search = '',
 }) => {
-  const indicators = useQuery(Indicator)
-  const formattedIndicators = formatIndicator(indicators)
+  const indicators = useAllIndicators()
+  const filteredIndicators = indicators.filtered('title CONTAINS[c] $0', search)
+  const formattedIndicators = formatIndicator(filteredIndicators)
   return (
     <>
       {formattedIndicators.map((indicator) => (
         <TitleCount
           key={indicator.id}
-          id={indicator.id}
           type={MemoriesOptions.Index}
-          title={indicator.title}
-          count={indicator.count}
           onPress={onPressItem}
+          {...indicator}
         />
       ))}
     </>
