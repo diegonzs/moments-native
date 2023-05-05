@@ -4,7 +4,7 @@ import { FlatList, Pressable, View } from 'react-native'
 import { Row } from '../row'
 import { Typography } from '../typography'
 
-interface OptionElementProps {
+export interface OptionElementProps {
   id: string
   title: string
   icon: ReactElement

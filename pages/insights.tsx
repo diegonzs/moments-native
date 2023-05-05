@@ -1,12 +1,26 @@
 import { cx } from 'classix'
+import { useState } from 'react'
 
 import { Chart } from '../components/chart'
 import { Column } from '../components/column'
+import { Dropdown, DropdownOptionProps } from '../components/dropdown'
 import ChevronIcon from '../components/icons/chevron'
 import { InfoCount } from '../components/insight/info-count'
 import { Row } from '../components/row'
 import { ScreenLayout } from '../components/screen-layout'
 import { Typography } from '../components/typography'
+
+const timeframeMap = {
+  yesterday: 'Yesterday',
+  today: 'Today',
+  'this-week': 'This Week',
+  'this-month': 'This Month',
+  'this-year': 'This Year',
+}
+
+const TIMEFRAME_OPTIONS: DropdownOptionProps[] = Object.entries(
+  timeframeMap,
+).map(([value, label]) => ({ value, label }))
 
 const mockInsightCount: {
   content: string
@@ -28,18 +42,23 @@ const mockInsightCount: {
 ]
 
 export const Insights = () => {
+  const [timeframeOption, setTimeframeOption] = useState(
+    TIMEFRAME_OPTIONS[2].value,
+  )
   return (
     <ScreenLayout>
       <Row className="justify-between items-center mb-6">
         <Typography variant="title" weight="700">
           Insights
         </Typography>
-        <Row className="items-center">
-          <ChevronIcon className="text-primary-60 mr-2" />
-          <Typography variant="body" weight="400" className="text-primary-60">
-            This Week
-          </Typography>
-        </Row>
+        <Dropdown options={TIMEFRAME_OPTIONS} onChange={setTimeframeOption}>
+          <Row className="items-center">
+            <ChevronIcon className="text-primary-60 mr-2" />
+            <Typography variant="body" weight="400" className="text-primary-60">
+              {timeframeMap[timeframeOption]}
+            </Typography>
+          </Row>
+        </Dropdown>
       </Row>
       <Typography variant="body" weight="600" className="text-primary-60 mb-4">
         Tracked moments
