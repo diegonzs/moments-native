@@ -1,10 +1,20 @@
 import { useCallback } from 'react'
 
 import { Moment, Process, Hashtag, Indicator } from '../models'
+import { InsightTimeframe } from '../types'
+import { getTimeframeRage } from '../utils'
 import { useObject, useQuery, useRealm } from './realm-hooks'
 
 export const useAllMoments = () => {
   return useQuery(Moment)
+}
+
+export const useAllMomentsByTimeframe = (timeframe: InsightTimeframe) => {
+  const realm = useRealm()
+  const { start, end } = getTimeframeRage(timeframe)
+  return realm
+    .objects<Moment>('Moment')
+    .filtered('createdAt >= $0 && createdAt <= $1', start, end)
 }
 
 export const useMomentById = (id: string) => {

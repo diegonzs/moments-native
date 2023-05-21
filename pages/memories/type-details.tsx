@@ -1,4 +1,6 @@
 import { useNavigation, useRoute } from '@react-navigation/native'
+import dayjs from 'dayjs'
+import { useMemo } from 'react'
 import { Pressable } from 'react-native'
 
 import { CardList } from '../../components/card-list'
@@ -18,11 +20,13 @@ type routeType = RootStackScreenProps<RouteName.TypeDetails>['route']
 export const TypeDetails = () => {
   const nav = useNavigation<navigationType>()
   const route = useRoute<routeType>()
+  const { start, end } = route.params
   const details = useMemoriesTypeDetails({
     type: route.params.type,
     id: route.params.id,
   })
   const onPressBackIcon = () => {
+    if (nav.canGoBack()) return nav.goBack()
     nav.navigate(RouteName.Tabs, { screen: RouteName.Memories })
   }
   const onPressPin = () => {
@@ -30,6 +34,20 @@ export const TypeDetails = () => {
     nav.navigate(RouteName.PinnedBoard, route.params)
   }
   const isProcess = route.params.type === MemoriesOptions.Process
+
+  const filteredMoments = useMemo(() => {
+    if (!start || !end) return details.moments
+    const startDate = dayjs(start)
+    const endDate = dayjs(end)
+    if (!dayjs(startDate).isValid() || !dayjs(endDate).isValid()) {
+      return details.moments
+    }
+    return details.moments.filtered(
+      'createdAt >= $0 && createdAt <= $1',
+      startDate.toDate(),
+      endDate.toDate(),
+    )
+  }, [details, start, end])
 
   return (
     <ScreenLayout>
@@ -50,9 +68,9 @@ export const TypeDetails = () => {
         {details.title}
       </Typography>
       <Typography variant="body" weight="600" className="text-primary-40 mb-6">
-        {details.moments.length} moments
+        {filteredMoments.length} moments
       </Typography>
-      <CardList moments={details.moments} />
+      <CardList moments={filteredMoments} />
     </ScreenLayout>
   )
 }

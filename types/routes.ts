@@ -71,6 +71,8 @@ export type RouteStackParamList = {
   [RouteName.TypeDetails]: {
     type: string
     id: string
+    start?: string
+    end?: string
   }
   [RouteName.PinnedBoard]: {
     type: string

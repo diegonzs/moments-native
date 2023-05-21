@@ -17,3 +17,11 @@ export enum SearchOptions {
   Tags = 'Tags',
   Index = 'Index',
 }
+
+export enum InsightTimeframe {
+  Yesterday = 'yesterday',
+  Today = 'today',
+  ThisWeek = 'this-week',
+  ThisMonth = 'this-month',
+  ThisYear = 'this-year',
+}
