@@ -62,6 +62,7 @@ export const useUpdateMomentContent = () => {
   return useCallback((moment: Moment, content: string) => {
     realm.write(() => {
       moment.content = content
+      moment.updatedAt = new Date()
     })
   }, [])
 }

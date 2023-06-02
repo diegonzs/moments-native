@@ -1,17 +1,17 @@
 import { useNavigation } from '@react-navigation/native'
 import useKeyboard from '@rnhooks/keyboard'
 import cx from 'classix'
+import dayjs from 'dayjs'
 import { SafeAreaView, Pressable, View } from 'react-native'
 import { KeyboardAccessoryView } from 'react-native-keyboard-accessory'
 
 import { useBottomSheet } from '../../../hooks'
+import { useMomentById } from '../../../hooks/moments'
 import colors from '../../../theme/colors'
 import { RootStackScreenProps, RouteName } from '../../../types/routes'
 import DeleteIcon from '../../icons/delete'
 import EditIcon from '../../icons/edit'
 import FileTextIcon from '../../icons/file-text'
-import Image2Icon from '../../icons/image-2'
-import Mic2Icon from '../../icons/mic-2'
 import MoreVertIcon from '../../icons/more-vert'
 import PlusIcon from '../../icons/plus'
 import RocketIcon from '../../icons/rocket'
@@ -36,6 +36,7 @@ export const Footer: React.FC<FooterProps> = ({
   onDeletePress,
 }) => {
   const nav = useNavigation<navigationType>()
+  const moment = useMomentById(momentId)
   const [visible] = useKeyboard()
   const {
     BottomSheet: OptionBottomSheet,
@@ -47,6 +48,8 @@ export const Footer: React.FC<FooterProps> = ({
     openBottomSheet: openAddMenuBottomSheet,
     closeBottomSheet: closeAddMenuBottomSheet,
   } = useBottomSheet({ snapPoints: ['25%', '25%', '50%'] })
+
+  const editedDate = moment.updatedAt ?? moment.createdAt
 
   const goToAllDetails = () => {
     nav.navigate(RouteName.AllDetails, { id: momentId })
@@ -82,18 +85,6 @@ export const Footer: React.FC<FooterProps> = ({
               title: 'Process',
               icon: <RocketIcon className="text-secondary-dark" />,
               action: goToAddProcess,
-            },
-            {
-              id: 'image',
-              title: 'Take image or video',
-              icon: <Image2Icon className="text-secondary-dark" />,
-              action: () => null,
-            },
-            {
-              id: 'voice',
-              title: 'Record voice',
-              icon: <Mic2Icon className="text-secondary-dark" />,
-              action: () => null,
             },
             {
               id: 'prompt',
@@ -154,7 +145,7 @@ export const Footer: React.FC<FooterProps> = ({
               variant="caption"
               className="text-primary-40 text-center"
             >
-              Last change 2:34 p.m.
+              Last change {dayjs(editedDate).format('h:mm a')}
             </Typography>
             <Pressable onPress={openAddMenuBottomSheet} hitSlop={10}>
               <MoreVertIcon className="text-primary" />
