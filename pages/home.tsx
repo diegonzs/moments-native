@@ -28,7 +28,9 @@ export const Home = () => {
   const goToSearch = () => nav.navigate(RouteName.Search)
   const createMoment = useCreateMoment()
   const moments = useAllMoments()
-  const filteredMoments = moments.filtered('isPinnedHome == true')
+  const filteredMoments = moments
+    .filtered('isPinnedHome == true')
+    .sorted('createdAt', true)
 
   const goToMomentDetails = () => {
     const moment = createMoment()
